@@ -136,4 +136,36 @@ class PDOmusique
 
         }
     }
+
+    public function getUser($user,$mp){
+        try {
+
+
+
+            $req = "SELECT `pseudo`, `mdp` FROM `user` WHERE `pseudo` = ? ";
+
+
+            $rs = self::$monPdo->prepare($req) ;
+
+            $rs->execute(array($user)) ;
+
+            $data = $rs->fetch();
+            $row = $rs->rowCount();
+            if($row == 1 ){
+                if($data['mdp'] == $mp){
+                    $_SESSION['connecter'] = true;
+                }else{
+                    $_SESSION['connecter'] = false;
+                }
+            }else{
+                $_SESSION['connecter'] = false;
+            }
+
+        }
+        catch (PDOException $e) {
+
+            echo 'Échec lors de la connexion : ' . $e->getMessage();
+
+        }
+    }
 }

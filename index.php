@@ -1,22 +1,24 @@
 <?php
 
 session_start();
-$_SESSION[pseudo] = false;
-if(!isset($_SESSION[pseudo])){
-
+require './Model/Connection.php';
+//$_SESSION['connecter'] = false;
+if (!connecte()){
     $action = 'connexion';
-}
-else if(!isset($_REQUEST['action']))
+}else{
+if(!isset($_REQUEST['action']))
 {
     $action = 'accueil';
 }
 else {
     $action = $_REQUEST['action'];
 }
+}
+
 if ($action !='pdf') {
     include("View/header.php");
 }
-require_once ("Model/PDOmusique.php");
+require_once("Model/PDOmusique.php");
 
 $monPdoMusic = PDOmusique::getPdoMusic();
 
@@ -24,6 +26,14 @@ switch($action)
 {
     case 'connexion':
         include("./View/connexion.php");
+        if (isset($_POST['connexionUser'])){
+            $user = htmlspecialchars(isset($_POST['pseudo']))? $_POST['pseudo'] : '';
+            $mp = htmlspecialchars(isset($_POST['mdp']))? $_POST['mdp'] : '';
+            $monPdoMusic->getUser($user,$mp);
+            if(connecte()){
+                $action = 'accueil';
+            }
+        }
         break;
     case 'accueil':
 
@@ -69,6 +79,7 @@ switch($action)
         include("View/createdPdf.php");
         creerPdf($Inscription);
         break;
+
 }
 include("View/foot.php") ;
 ?>
