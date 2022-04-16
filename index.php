@@ -1,9 +1,21 @@
 <?php
+require_once("Model/PDOmusique.php");
 
+$monPdoMusic = PDOmusique::getPdoMusic();
 session_start();
 require './Model/Connection.php';
 //$_SESSION['connecter'] = false;
-if (!connecte()){
+if (isset($_POST['connexionUser'])){
+     $user = htmlspecialchars(isset($_POST['pseudo']))? $_POST['pseudo'] : '';
+     $mp = htmlspecialchars(isset($_POST['mdp']))? $_POST['mdp'] : '';
+     $monPdoMusic->getUser($user,$mp);
+     if(connecte()){
+                ob_start();
+                header("Location: index.php?action=accueil") ;
+                ob_end_flush();
+              //  $action = 'accueil';
+            }
+}else if(!connecte()){
     $action = 'connexion';
 }else{
 if(!isset($_REQUEST['action']))
@@ -18,22 +30,12 @@ else {
 if ($action !='pdf') {
     include("View/header.php");
 }
-require_once("Model/PDOmusique.php");
 
-$monPdoMusic = PDOmusique::getPdoMusic();
 
 switch($action)
 {
     case 'connexion':
         include("./View/connexion.php");
-        if (isset($_POST['connexionUser'])){
-            $user = htmlspecialchars(isset($_POST['pseudo']))? $_POST['pseudo'] : '';
-            $mp = htmlspecialchars(isset($_POST['mdp']))? $_POST['mdp'] : '';
-            $monPdoMusic->getUser($user,$mp);
-            if(connecte()){
-                $action = 'accueil';
-            }
-        }
         break;
     case 'accueil':
 
@@ -83,3 +85,5 @@ switch($action)
 }
 include("View/foot.php") ;
 ?>
+
+
