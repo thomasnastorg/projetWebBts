@@ -82,6 +82,20 @@ switch($action)
         creerPdf($Inscription);
         break;
 
+    case 'del':
+        if(isset($_POST['del'])){
+            $iduser = htmlspecialchars(isset($_GET['inscriptiondeluser']))? $_GET['inscriptiondeluser'] : '';
+            $id = htmlspecialchars(isset($_GET['inscriptiondelcours']))? $_GET['inscriptiondelcours'] : '';
+        }
+        $monPdoMusic = PDOmusique::getPdoMusic();
+        $Inscription = $monPdoMusic->DelInscription($iduser,$id);
+
+
+
+
+        break;
+
+
 }
 include("View/foot.php") ;
 ?>

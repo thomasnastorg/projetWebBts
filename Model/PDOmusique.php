@@ -137,6 +137,15 @@ class PDOmusique
         }
     }
 
+    public function DelInscription($iduser,$id){
+
+        $req = "DELETE FROM `inscription` WHERE `inscription`.`idad` = '$iduser' AND `inscription`.`idcours` = '$id'";
+
+        $rssss = self::$monPdo->prepare($req) ;
+
+        $rssss->execute();
+    }
+
     public function getUser($user,$mp){
         try {
 
